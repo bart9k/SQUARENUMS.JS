@@ -1,0 +1,24 @@
+{
+    "author": "bart9k",
+    "dependencies": {},
+    "keywords": [],
+    "name": "squarenums.js",
+    "pebble": {
+        "displayName": "SquareNums.js",
+        "enableMultiJS": true,
+        "messageKeys": [],
+        "projectType": "rocky",
+        "resources": {
+            "media": []
+        },
+        "sdkVersion": "3",
+        "targetPlatforms": [
+            "basalt"
+        ],
+        "uuid": "35230137-428e-4789-8f2f-5a8edf9c2774",
+        "watchapp": {
+            "watchface": true
+        }
+    },
+    "version": "0.1.0"
+}
