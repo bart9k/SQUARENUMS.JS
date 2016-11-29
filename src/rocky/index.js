@@ -1,7 +1,7 @@
 var rocky = require('rocky');
 
 // my function to draw number based on imput parametr
-function drawNumber(ctx, cx, cy, digit, colorNumber) {
+function drawNumber(ctx, cx, cy, digit, colorNumber, colorBg) {
 	
 	// set didget color
 	ctx.fillStyle = colorNumber;
@@ -10,47 +10,48 @@ function drawNumber(ctx, cx, cy, digit, colorNumber) {
 	} else {
 		ctx.fillRect(cx+7,cy+7,56,56);
 	}
-
-	// based on didget draw holes to initial sqaure
+	
+	// based on didget draw holes to initial sqaure in same colorBg
+	ctx.fillStyle = colorBg;
 	switch(digit) {
 		case 0:
-			ctx.clearRect(cx+21,cy+21,28,28);
+			ctx.fillRect(cx+21,cy+21,28,28);
         break;
 		case 1:
-			ctx.clearRect(cx+14,cy+21,14,28);
-			ctx.clearRect(cx+42,cy+7,14,42);
+			ctx.fillRect(cx+14,cy+21,14,28);
+			ctx.fillRect(cx+42,cy+7,14,42);
         break;
 		case 2:
-			ctx.clearRect(cx+7,cy+21,42,7);
-			ctx.clearRect(cx+21,cy+42,42,7);
+			ctx.fillRect(cx+7,cy+21,42,7);
+			ctx.fillRect(cx+21,cy+42,42,7);
         break;
 		case 3:
-			ctx.clearRect(cx+7,cy+21,42,7);
-			ctx.clearRect(cx+7,cy+42,42,7);
+			ctx.fillRect(cx+7,cy+21,42,7);
+			ctx.fillRect(cx+7,cy+42,42,7);
 		break;
 		case 4:
-			ctx.clearRect(cx+21,cy+7,28,21);
-			ctx.clearRect(cx+7,cy+42,42,21);
+			ctx.fillRect(cx+21,cy+7,28,21);
+			ctx.fillRect(cx+7,cy+42,42,21);
         break;
 		case 5:
-			ctx.clearRect(cx+7,cy+42,42,7);
-			ctx.clearRect(cx+21,cy+21,42,7);
+			ctx.fillRect(cx+7,cy+42,42,7);
+			ctx.fillRect(cx+21,cy+21,42,7);
         break;
 		case 6:
-			ctx.clearRect(cx+7,cy+21,42,7);
-			ctx.clearRect(cx+7,cy+42,42,7);
+			ctx.fillRect(cx+7,cy+21,42,7);
+			ctx.fillRect(cx+7,cy+42,42,7);
         break;
 		case 7:
-			ctx.clearRect(cx+7,cy+21,42,7);
-			ctx.clearRect(cx+7,cy+42,42,7);
+			ctx.fillRect(cx+7,cy+21,42,7);
+			ctx.fillRect(cx+7,cy+42,42,7);
         break;
 		case 8:
-			ctx.clearRect(cx+7,cy+21,42,7);
-			ctx.clearRect(cx+7,cy+42,42,7);
+			ctx.fillRect(cx+7,cy+21,42,7);
+			ctx.fillRect(cx+7,cy+42,42,7);
         break;
 		case 9:
-			ctx.clearRect(cx+7,cy+21,42,7);
-			ctx.clearRect(cx+7,cy+42,42,7);
+			ctx.fillRect(cx+7,cy+21,42,7);
+			ctx.fillRect(cx+7,cy+42,42,7);
         break;
     	default:
 		  ctx.fillStyle = 'grey';
@@ -64,9 +65,13 @@ rocky.on('draw', function(event) {
 
 	// Current date/time
 	var d = new Date();
+	// Set color
+	var colorBg = "lime";
+	var colorDigit = "lightblue";
 	
 	// Clear the screen
-	ctx.clearRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
+	ctx.fillStyle = colorBg;
+	ctx.fillRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
 
 	// Determine the points of the display individual didgets
 	var xLeft = 1;
@@ -82,15 +87,12 @@ rocky.on('draw', function(event) {
 	var minuteLeft = Math.floor(minutes/10);
 	var minuteRight = minutes%10;
 
-	//diget color
-	var digitColor = "lightblue";
-	
 	//Draw hour didgets
-	drawNumber(ctx, xLeft, yUp, hourLeft, digitColor);
-	drawNumber(ctx, xRight, yUp, hourRight, digitColor);
+	drawNumber(ctx, xLeft, yUp, hourLeft, colorDigit, colorBg);
+	drawNumber(ctx, xRight, yUp, hourRight, colorDigit, colorBg);
 	// Draw minute didgets
-	drawNumber(ctx, xLeft, yBottom, minuteLeft, digitColor);
-	drawNumber(ctx, xRight, yBottom, minuteRight, digitColor);
+	drawNumber(ctx, xLeft, yBottom, minuteLeft, colorDigit, colorBg);
+	drawNumber(ctx, xRight, yBottom, minuteRight, colorDigit, colorBg);
 	
 	//console.log("minutes: " + d.getMinutes()%10 + " hours: " + Math.floor(d.getMinutes()/10));
 	console.log(d + " Broken: " + hourLeft + " " + hourRight + " " + minuteLeft + " " + minuteRight);
