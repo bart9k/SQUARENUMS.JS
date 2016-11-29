@@ -1,5 +1,7 @@
 var rocky = require('rocky');
 
+var GlobalInit = 1;
+
 // my function to draw number based on imput parametr
 function drawNumber(ctx, cx, cy, digit, colorNumber, colorBg) {
 	
@@ -23,7 +25,7 @@ function drawNumber(ctx, cx, cy, digit, colorNumber, colorBg) {
         break;
 		case 1:
 			ctx.fillRect(cx+7,cy+14,14,28);
-			ctx.fillRect(cx+42,cy,14,42);
+			ctx.fillRect(cx+35,cy,14,42);
         break;
 		case 2:
 			ctx.fillRect(cx,cy+14,42,7);
@@ -72,7 +74,7 @@ rocky.on('draw', function(event) {
 	// Current date/time
 	var d = new Date();
 	// Set color
-	var colorBg = "lime";
+	var colorBg = "grey";
 	var colorDigit = "lightblue";
 	
 	
@@ -92,19 +94,32 @@ rocky.on('draw', function(event) {
 
 	// Clear the screen
 	// in future clear just digit which needs redraw -> clear func
-	ctx.fillStyle = colorBg;
-	ctx.fillRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
+	
 
-	//Draw hour didgets
-	drawNumber(ctx, xLeft, yUp, hourLeft, colorDigit, colorBg);
-	drawNumber(ctx, xRight, yUp, hourRight, colorDigit, colorBg);
-	// Draw minute didgets
-	drawNumber(ctx, xLeft, yBottom, minuteLeft, colorDigit, colorBg);
+	if (GlobalInit == 1) {
+		ctx.fillStyle = colorBg;
+		ctx.fillRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
+		drawNumber(ctx, xLeft, yBottom, minuteLeft, colorDigit, colorBg);
+		drawNumber(ctx, xRight, yUp, hourRight, colorDigit, colorBg);
+		drawNumber(ctx, xLeft, yUp, hourLeft, colorDigit, colorBg);
+		GlobalInit = 0;
+	}
+	
 	drawNumber(ctx, xRight, yBottom, minuteRight, colorDigit, colorBg);
 	
-	// Draw minute didgets
-	drawNumber(ctx, xLeft, yBottom, 8, colorDigit, colorBg);
-	drawNumber(ctx, xRight, yBottom, 9, colorDigit, colorBg);
+	if (minuteRight === 0) {
+		console.log(d + " Re-draw minuteLeft (" + minuteLeft + ")");
+		drawNumber(ctx, xLeft, yBottom, minuteLeft, colorDigit, colorBg);
+		if (minuteLeft === 0) {
+			console.log(d + " Re-draw hourRight (" + hourRight + ")");
+			drawNumber(ctx, xRight, yUp, hourRight, colorDigit, colorBg);
+			if (hourRight === 0) {
+				console.log(d + " Re-draw hourLeft (" + hourLeft + ")");
+				drawNumber(ctx, xLeft, yUp, hourLeft, colorDigit, colorBg);
+			}
+		}
+	}
+	
 	
 	// to do
 	// redraw only digit which needs it
@@ -113,9 +128,9 @@ rocky.on('draw', function(event) {
 	// 		if minuteRight = 0 minuteLeft needs redraw
 	//		if minuteRight = 0 and minuteLeft = 0, hourRight needs redraw
 	//		if hourRight = 0 and hourLeft = 1, hourRight = 
+	// Or subscribe on hour and newDay events
 	
 	//console.log("minutes: " + d.getMinutes()%10 + " hours: " + Math.floor(d.getMinutes()/10));
-	console.log(d + " Broken: " + hourLeft + " " + hourRight + " " + minuteLeft + " " + minuteRight);
 
 	// time text on bottom
 	// Determine the width and height of the display
