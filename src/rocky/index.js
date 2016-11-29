@@ -74,15 +74,15 @@ rocky.on('draw', function(event) {
 	// Current date/time
 	var d = new Date();
 	// Set color
-	var colorBg = "grey";
-	var colorDigit = "lightblue";
+	var colorBg = "vividcerulean";
+	var colorDigit = "black";
 	
 	
 	// Determine the points of the display individual didgets
 	var xLeft = 8;
 	var xRight = 80;
-	var yUp = 8;
-	var yBottom = 80;
+	var yUp = 16;
+	var yBottom = 96;
   
 	// Split hours to individual didgets
 	var hours = d.getHours();
@@ -97,12 +97,29 @@ rocky.on('draw', function(event) {
 	
 
 	if (GlobalInit == 1) {
+		ctx.clearRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
 		ctx.fillStyle = colorBg;
-		ctx.fillRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
+		ctx.fillRect(0, 8, ctx.canvas.clientWidth, ctx.canvas.clientHeight-16);
 		drawNumber(ctx, xLeft, yBottom, minuteLeft, colorDigit, colorBg);
 		drawNumber(ctx, xRight, yUp, hourRight, colorDigit, colorBg);
 		drawNumber(ctx, xLeft, yUp, hourLeft, colorDigit, colorBg);
 		GlobalInit = 0;
+		
+		//draw middle cross
+		var w = ctx.canvas.unobstructedWidth;
+		var h = ctx.canvas.unobstructedHeight;
+		ctx.beginPath();
+
+  		// Move to the center point, then draw the line
+		ctx.moveTo(0, h/2);
+  		ctx.lineTo(w, h/2);
+		ctx.moveTo(w/2, 8);
+  		ctx.lineTo(w/2, h-8);
+
+  		// Stroke the line (output to display)
+  		ctx.lineWidth = 1;
+  		ctx.strokeStyle = colorDigit;
+		ctx.stroke();
 	}
 	
 	drawNumber(ctx, xRight, yBottom, minuteRight, colorDigit, colorBg);
@@ -120,19 +137,8 @@ rocky.on('draw', function(event) {
 		}
 	}
 	
-	
-	// to do
-	// redraw only digit which needs it
-	// on minute ticks 
-	// 		minuteRight needs redraw everytime
-	// 		if minuteRight = 0 minuteLeft needs redraw
-	//		if minuteRight = 0 and minuteLeft = 0, hourRight needs redraw
-	//		if hourRight = 0 and hourLeft = 1, hourRight = 
-	// Or subscribe on hour and newDay events
-	
-	//console.log("minutes: " + d.getMinutes()%10 + " hours: " + Math.floor(d.getMinutes()/10));
 
-	// time text on bottom
+/*	// time text on bottom
 	// Determine the width and height of the display
 	var w = ctx.canvas.unobstructedWidth;
 	var h = ctx.canvas.unobstructedHeight;
@@ -145,6 +151,7 @@ rocky.on('draw', function(event) {
 
 	// Display the time, on the bottom of the screen
 	ctx.fillText(d.toLocaleTimeString(), w / 2, h-20, w);
+*/
 
 });
 
