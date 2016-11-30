@@ -2,6 +2,8 @@ var rocky = require('rocky');
 
 var GlobalInit = 1;
 
+var settings = null;
+
 // my function to draw number based on imput parametr
 function drawNumber(ctx, cx, cy, digit, colorNumber, colorBg) {
 	
@@ -74,8 +76,16 @@ rocky.on('draw', function(event) {
 	// Current date/time
 	var d = new Date();
 	// Set color
-	var colorBg = "vividcerulean";
+	var colorBg = "celeste";
 	var colorDigit = "black";
+	if (settings) {
+		colorDigit = cssColor(settings.digitColor);
+		colorBg = cssColor(settings.BackgroundColor);
+	} else {
+		colorBg = "celeste";
+		colorDigit = "black";
+	}
+	
 	
 	
 	// Determine the points of the display individual didgets
@@ -136,23 +146,6 @@ rocky.on('draw', function(event) {
 			}
 		}
 	}
-	
-
-/*	// time text on bottom
-	// Determine the width and height of the display
-	var w = ctx.canvas.unobstructedWidth;
-	var h = ctx.canvas.unobstructedHeight;
-
-	// Set the text color
-	ctx.fillStyle = 'white';
-
-	// Center align the text
-	ctx.textAlign = 'center';
-
-	// Display the time, on the bottom of the screen
-	ctx.fillText(d.toLocaleTimeString(), w / 2, h-20, w);
-*/
-
 });
 
 rocky.on('minutechange', function(event) {
@@ -162,3 +155,43 @@ rocky.on('minutechange', function(event) {
 	// Request the screen to be redrawn on next pass
 	rocky.requestDraw();
 });
+
+rocky.on('message', function(event) {
+	settings = event.data;
+	GlobalInit = 1;
+	rocky.requestDraw();
+});
+
+rocky.postMessage({command: 'settings'});
+
+// Borrowed from Clay.js
+
+/**
+ * @param {string|boolean|number} color
+ * @returns {string}
+ */
+function cssColor(color) {
+  if (typeof color === 'number') {
+    color = color.toString(16);
+  } else if (!color) {
+    return 'transparent';
+  }
+
+  color = padColorString(color);
+
+  return '#' + color;
+}
+
+/**
+ * @param {string} color
+ * @return {string}
+ */
+function padColorString(color) {
+  color = color.toLowerCase();
+
+  while (color.length < 6) {
+    color = '0' + color;
+  }
+
+  return color;
+}
